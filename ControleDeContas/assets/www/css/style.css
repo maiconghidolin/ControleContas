@@ -1,0 +1,14 @@
+html{
+    height: 100% !important;
+}
+
+body{
+    font-family: Lucida Grande, Verdana, Lucida Sans Regular, Lucida Sans Unicode, Arial, sans-serif !important;
+    font-size: 12pt !important;
+}
+
+.ui-overlay-a, .ui-page-theme-a, .ui-page-theme-a .ui-panel-wrapper {
+    background-color: #272825;
+    color: #F59117;
+    text-shadow: none;
+}
