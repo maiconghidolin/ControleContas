@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Controle de Contas</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+		<link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="jquery/jquery.mobile-1.4.5.min.css"/>
+		
+        <script type="text/javascript" src="cordova-2.7.0.js"></script>
+        <script type="text/javascript" charset="utf-8" src="jquery/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" charset="utf-8" src="jquery/jquery.mobile-1.4.5.min.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="css/style.css"/>
+
+        <script type="text/javascript" charset="utf-8">
+        	$(document).ready(function() {            			
+				
+			});
+        </script>   
+    </head>
+    <body>
+	    <form>
+	        <div data-role="page" id="main" >
+	            <div data-role="content">
+	            	<div class="fieldzao">
+						<a class="fieldmeio" href="#cadastros" data-transition="flow">
+							<div class="icone">
+								<i class="fa fa-plus"></i>
+								<label>Add</label>
+							</div>
+	            		</a>
+	            		<a class="fieldmeio" href="#estatisticas" data-transition="flow">
+							<div class="icone">
+								<i class="fa fa-line-chart"></i>
+								<label>Estatísticas</label>
+							</div>
+	            		</a>
+	            	</div>
+	            	<div class="fieldzao">
+						<a class="fieldmeio">
+							<div class="icone">
+								<i class="fa fa-search"></i>
+								<label>Pesquisar</label>
+							</div>
+	            		</a>
+	            		<a class="fieldmeio">
+							<div class="icone">
+								<i class="fa fa-cogs"></i>
+								<label>Configurações</label>
+							</div>
+	            		</a>
+	            	</div>
+	            </div>
+	        </div>
+	        <div data-role="page" id="cadastros">
+	            <div data-role="content">
+	            	<div class="fieldzao">
+	            		<a class="fieldumquarto" href="#main" data-transition="flow" data-direction="reverse">
+	            			<div class="icone-voltar">
+	            				<i class="fa fa-arrow-circle-left"></i>
+	            			</div>
+	            		</a>	
+						<div class="fieldmeio">
+							<div class="title">
+	            				<label>Adicionar novo(a):</label>
+	            			</div>
+	            		</div>
+	            	</div>
+	            	<div class="fieldzao">
+						<a class="fieldmeio" href="CadastroDespesas.html" data-transition="flow">
+							<div class="icone-com-titulo">
+								<i class="fa fa-file-text-o"></i>
+								<label>Despesa</label>
+							</div>
+	            		</a>
+	            		<div class="fieldmeio">
+							<div class="icone-com-titulo">
+								<i class="fa fa-credit-card"></i>
+								<label>Tipo Pagamento</label>
+							</div>
+	            		</div>
+	            	</div>
+	            	<div class="fieldzao">
+						<div class="fieldmeio">
+							<div class="icone">
+								<i class="fa fa-list-ul"></i>
+								<label>Categoria</label>
+							</div>
+	            		</div>
+	            	</div>
+	            </div>
+	        </div>
+	        <div data-role="page" id="estatisticas">
+	            <div data-role="content">
+	            	<div class="fieldzao">
+	            		<a class="fieldumquarto" href="#main" data-transition="flow" data-direction="reverse">
+	            			<div class="icone-voltar">
+	            				<i class="fa fa-arrow-circle-left"></i>
+	            			</div>
+	            		</a>	
+						<div class="fieldmeio">
+							<div class="title">
+	            				<label>Gráfico por:</label>
+	            			</div>
+	            		</div>
+	            	</div>
+	            	<div class="fieldzao">
+						<div class="fieldmeio" >
+							<div class="icone-com-titulo">
+								<i class="fa fa-list-ul"></i>
+								<label>Categoria</label>
+							</div>
+	            		</div>
+	            		<div class="fieldmeio">
+							<div class="icone-com-titulo">
+								<i class="fa fa-credit-card"></i>
+								<label>Tipo Pagamento</label>
+							</div>
+	            		</div>
+	            	</div>
+	            	<div class="fieldzao">
+						<div class="fieldmeio">
+							<div class="icone">
+								<i class="fa fa-line-chart"></i>
+								<label>Categoria no período</label>
+							</div>
+	            		</div>
+	            	</div>
+	            </div>
+	        </div>
+	    </form>
+    </body>
+</html>

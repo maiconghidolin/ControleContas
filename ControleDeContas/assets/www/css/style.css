@@ -1,14 +1,114 @@
-html{
-    height: 100% !important;
-}
 
 body{
     font-family: Lucida Grande, Verdana, Lucida Sans Regular, Lucida Sans Unicode, Arial, sans-serif !important;
-    font-size: 12pt !important;
+    font-size: 14pt !important;
+    font-weight: bold !important;
+    height: none !important;
+    background-color: #30302E;
 }
 
 .ui-overlay-a, .ui-page-theme-a, .ui-page-theme-a .ui-panel-wrapper {
     background-color: #272825;
     color: #F59117;
     text-shadow: none;
+}
+
+.ui-mobile, .ui-mobile body {
+    height: auto;
+}
+
+.ui-mobile label, div.ui-controlgroup-label {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.ui-body-a, .ui-overlay-a { 
+	background-color: #272825;
+}
+
+.ui-mobile-viewport-transitioning, .ui-mobile-viewport-transitioning .ui-page { 
+	background-color: #272825;
+}
+
+.icone{
+	font-size: 90px;
+    text-align: center;
+    padding-top: 75px;
+    color: #f59117;
+}
+
+.icone-voltar{
+	font-size: 35px;
+    text-align: center;
+    color: #f59117;
+}
+
+.icone-com-titulo{
+	font-size: 90px;
+    text-align: center;
+    padding-top: 35px;
+    color: #f59117;
+}
+
+.fieldzao{
+	width: 100%;
+	clear: both;
+    padding-top: 10px;
+}
+
+.fieldumquarto{
+	float: left;
+	width: 25%;
+}
+
+.fieldmeio{
+	float: left;
+	width: 50%;
+}
+
+.fieldtresquartos{
+	float: left;
+	width: 75%;
+}
+
+.fieldinteiro{
+	float: left;
+	width: 100%;
+}
+
+.input{
+    width: 98%;
+}
+
+.input input{
+    background-color: #828281;
+    color: #fff;
+    border-color: #000;
+}
+
+.input select{
+    background-color: #828281;
+    color: #fff;
+}
+
+.input textarea{
+    background-color: #828281;
+    color: #fff;
+}
+
+.label{
+
+}
+
+a:link, a:visited, a:active {
+	text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.title{
+	padding-top: 10px;
+	text-align: center;
 }
