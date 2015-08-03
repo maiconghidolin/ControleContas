@@ -7,17 +7,41 @@
 
 		<link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css"/>
 		<link rel="stylesheet" type="text/css" href="jquery/jquery.mobile-1.4.5.min.css"/>
-		
-        <script type="text/javascript" src="cordova-2.7.0.js"></script>
+		<link rel="stylesheet" type="text/css" href="jquery/jquery-ui.min.css"/>
+
+        <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" charset="utf-8" src="jquery/jquery-1.11.3.min.js"></script>
         <script type="text/javascript" charset="utf-8" src="jquery/jquery.mobile-1.4.5.min.js"></script>
+		<script type="text/javascript" charset="utf-8" src="jquery/jquery-ui.min.js"></script>
 
 		<link rel="stylesheet" type="text/css" href="css/style.css"/>
 
         <script type="text/javascript" charset="utf-8">
-        	$(document).ready(function() {            			
-				
+
+        	document.addEventListener('deviceready', onDeviceReady, false);
+
+        	function onDeviceReady() {
+	        	document.addEventListener("backbutton", function(e){
+	        		if($.mobile.activePage.is('#main')){
+				        e.preventDefault();
+				        navigator.app.exitApp();
+				    } else if($.mobile.activePage.is('#Cadastros')){
+						$.mobile.changePage("#main", { transition: "flow", reverse: "true"});
+				   	} else if($.mobile.activePage.is('#Estatisticas')){
+						$.mobile.changePage("#main", { transition: "flow", reverse: "true"});
+				   	} else if($.mobile.activePage.is('#CadastroDespesas')){
+				   		$("#txtData" ).datepicker("hide");
+				        $.mobile.changePage("#Cadastros", { transition: "flow", reverse: "true"});
+				    }
+			    }, false);
+	    	}
+
+		    $(document).ready(function() {            			
+				$( "#txtData" ).datepicker({
+					dateFormat: "dd/mm/yy"
+				});
 			});
+
         </script>   
     </head>
     <body>
@@ -25,13 +49,13 @@
 	        <div data-role="page" id="main" >
 	            <div data-role="content">
 	            	<div class="fieldzao">
-						<a class="fieldmeio" href="#cadastros" data-transition="flow">
+						<a class="fieldmeio" href="#Cadastros" data-transition="flow">
 							<div class="icone">
 								<i class="fa fa-plus"></i>
 								<label>Add</label>
 							</div>
 	            		</a>
-	            		<a class="fieldmeio" href="#estatisticas" data-transition="flow">
+	            		<a class="fieldmeio" href="#Estatisticas" data-transition="flow">
 							<div class="icone">
 								<i class="fa fa-line-chart"></i>
 								<label>Estatísticas</label>
@@ -54,7 +78,7 @@
 	            	</div>
 	            </div>
 	        </div>
-	        <div data-role="page" id="cadastros">
+	        <div data-role="page" id="Cadastros">
 	            <div data-role="content">
 	            	<div class="fieldzao">
 	            		<a class="fieldumquarto" href="#main" data-transition="flow" data-direction="reverse">
@@ -69,7 +93,7 @@
 	            		</div>
 	            	</div>
 	            	<div class="fieldzao">
-						<a class="fieldmeio" href="CadastroDespesas.html" data-transition="flow">
+						<a class="fieldmeio" href="#CadastroDespesas" data-transition="flow">
 							<div class="icone-com-titulo">
 								<i class="fa fa-file-text-o"></i>
 								<label>Despesa</label>
@@ -92,7 +116,7 @@
 	            	</div>
 	            </div>
 	        </div>
-	        <div data-role="page" id="estatisticas">
+	        <div data-role="page" id="Estatisticas">
 	            <div data-role="content">
 	            	<div class="fieldzao">
 	            		<a class="fieldumquarto" href="#main" data-transition="flow" data-direction="reverse">
@@ -129,6 +153,73 @@
 	            		</div>
 	            	</div>
 	            </div>
+	        </div>
+	        <div data-role="page" id="CadastroDespesas">
+	            <div data-role="content">
+	            	<div class="fieldzao">
+	            		<a class="fieldumquarto" href="#Cadastros" data-transition="flow" data-direction="reverse">
+	            			<div class="icone-voltar">
+	            				<i class="fa fa-arrow-circle-left"></i>
+	            			</div>
+	            		</a>	
+						<div class="fieldmeio">
+							<div class="title">
+	            				<label>Nova despesa:</label>
+	            			</div>
+	            		</div>
+	            	</div>
+	            	<div class="fieldzao">
+						<div class="fieldinteiro" >
+							<div class="label">
+								<label>Categoria:</label>
+							</div>
+							<div class="select">
+								<select name="sltCategoria" id="sltCategoria" data-native-menu="false">
+									<option value="mon">Monday</option>
+								   	<option value="tue">Tuesday</option>
+								   	<option value="wed">Wednesday</option>
+								</select>
+							</div>
+	            		</div>
+	            	</div>
+	            	<div class="fieldzao">
+						<div class="fieldinteiro" >
+							<div class="label">
+								<label>Tipo pagamento:</label>
+							</div>
+							<div class="select">
+								<select name="sltTipoPagamento" id="sltTipoPagamento" data-native-menu="false">
+									<option value="mon">Monday</option>
+								   	<option value="tue">Tuesday</option>
+								   	<option value="wed">Wednesday</option>
+							    </select>
+							</div>
+	            		</div>
+	            	</div>
+	            	<div class="fieldzao">
+						<div class="fieldmeio" >
+							<div class="label">
+								<label>Data:</label>
+							</div>
+							<div class="input">
+								<input type="text" id="txtData" readonly>
+							</div>
+	            		</div>
+	            		<div class="fieldmeio" >
+							<div class="label">
+								<label>Valor:</label>
+							</div>
+							<div class="input">
+								<input type="text" id="txtValor">
+							</div>
+	            		</div>
+	            	</div>
+	            </div>
+	            <div data-role="footer" data-position="fixed" style="text-align:center"> 
+	            	<div >
+	            		<input type="button" id="btnSalvar" value="Salvar" > 
+	            	</div>
+				</div> 
 	        </div>
 	    </form>
     </body>

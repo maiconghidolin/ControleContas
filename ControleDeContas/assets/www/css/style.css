@@ -1,10 +1,10 @@
 
 body{
-    font-family: Lucida Grande, Verdana, Lucida Sans Regular, Lucida Sans Unicode, Arial, sans-serif !important;
+    font-family: Verdana, Arial, sans-serif !important;
     font-size: 14pt !important;
     font-weight: bold !important;
     height: none !important;
-    background-color: #30302E;
+    background-color: #272825;
 }
 
 .ui-overlay-a, .ui-page-theme-a, .ui-page-theme-a .ui-panel-wrapper {
@@ -30,6 +30,87 @@ body{
 	background-color: #272825;
 }
 
+.ui-page-theme-a .ui-btn, html .ui-bar-a .ui-btn, html .ui-body-a .ui-btn, html body .ui-group-theme-a .ui-btn, html head + body .ui-btn.ui-btn-a, .ui-page-theme-a .ui-btn:visited, html .ui-bar-a .ui-btn:visited, html .ui-body-a .ui-btn:visited, html body .ui-group-theme-a .ui-btn:visited, html head + body .ui-btn.ui-btn-a:visited {
+    background-color: #5d5d5b;
+    border-color: #000;
+    color: #f59117;
+    text-shadow: none;
+}
+
+.ui-page-theme-a .ui-btn, html .ui-bar-a .ui-btn, html .ui-body-a .ui-btn, html body .ui-group-theme-a .ui-btn, html head + body .ui-btn.ui-btn-a, .ui-page-theme-a .ui-btn:visited, html .ui-bar-a .ui-btn:visited, html .ui-body-a .ui-btn:visited, html body .ui-group-theme-a .ui-btn:visited, html head + body .ui-btn.ui-btn-a:visited {
+    background-color: #5d5d5b;
+    border-color: #000;
+    color: #f59117;
+    text-shadow: none;
+}
+
+.ui-page-theme-a .ui-btn:hover, html .ui-bar-a .ui-btn:hover, html .ui-body-a .ui-btn:hover, html body .ui-group-theme-a .ui-btn:hover, html head + body .ui-btn.ui-btn-ahover {
+    background-color: #5d5d5b;
+    border-color: #000;
+    color: #f59117;
+    text-shadow: none;
+}
+
+.ui-body-a, .ui-page-theme-a .ui-body-inherit, html .ui-bar-a .ui-body-inherit, html .ui-body-a .ui-body-inherit, html body .ui-group-theme-a .ui-body-inherit, html .ui-panel-page-container-a {
+    background-color: #5d5d5b;
+    border-color: #000;
+    color: #f59117;
+    text-shadow: none;
+}
+
+
+.ui-page-theme-a .ui-btn.ui-btn-active, html .ui-bar-a .ui-btn.ui-btn-active, html .ui-body-a .ui-btn.ui-btn-active, html body .ui-group-theme-a .ui-btn.ui-btn-active, html head + body .ui-btn.ui-btn-a.ui-btn-active, .ui-page-theme-a .ui-checkbox-on::after, html .ui-bar-a .ui-checkbox-on::after, html .ui-body-a .ui-checkbox-on::after, html body .ui-group-theme-a .ui-checkbox-on::after, .ui-btn.ui-checkbox-on.ui-btn-a::after, .ui-page-theme-a .ui-flipswitch-active, html .ui-bar-a .ui-flipswitch-active, html .ui-body-a .ui-flipswitch-active, html body .ui-group-theme-a .ui-flipswitch-active, html body .ui-flipswitch.ui-bar-a.ui-flipswitch-active, .ui-page-theme-a .ui-slider-track .ui-btn-active, html .ui-bar-a .ui-slider-track .ui-btn-active, html .ui-body-a .ui-slider-track .ui-btn-active, html body .ui-group-theme-a .ui-slider-track .ui-btn-active, html body div.ui-slider-track.ui-body-a .ui-btn-active {
+    background-color: #5d5d5b;
+    border-color: #000;
+    color: #f59117;
+    text-shadow: none;
+}
+
+.ui-page-theme-a .ui-btn:focus, html .ui-bar-a .ui-btn:focus, html .ui-body-a .ui-btn:focus, html body .ui-group-theme-a .ui-btn:focus, html head + body .ui-btn.ui-btn-a:focus, .ui-page-theme-a .ui-focus, html .ui-bar-a .ui-focus, html .ui-body-a .ui-focus, html body .ui-group-theme-a .ui-focus, html head + body .ui-btn-a.ui-focus, html head + body .ui-body-a.ui-focus {
+    box-shadow: 0 0 12px #f59117;
+}
+
+.ui-widget-content {
+    background: #272825;
+    border: 1px solid #000;
+    color: #f59117;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background: #5d5d5b;
+    border: 1px solid #000;
+    color: #f59117;
+    font-weight: normal;
+}
+
+.ui-widget-header {
+    background: #5d5d5b;
+    border: 1px solid #000;
+    color: #f59117;
+    font-weight: bold;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+    background: #7d7d7c;
+    border: 1px solid #f59117;
+    color: #f59117;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+    background: #7d7d7c;
+    border: 1px solid #000;
+    color: #f59117;
+    font-weight: normal;
+}
+
+.ui-bar-a, .ui-page-theme-a .ui-bar-inherit, html .ui-bar-a .ui-bar-inherit, html .ui-body-a .ui-bar-inherit, html body .ui-group-theme-a .ui-bar-inherit {
+    background-color: #272825;
+    border-color: #272825;
+    color: #f59117;
+    font-weight: 700;
+    text-shadow: none;
+}
+
 .icone{
 	font-size: 90px;
     text-align: center;
@@ -39,7 +120,6 @@ body{
 
 .icone-voltar{
 	font-size: 35px;
-    text-align: center;
     color: #f59117;
 }
 
@@ -81,14 +161,14 @@ body{
 }
 
 .input input{
-    background-color: #828281;
-    color: #fff;
+    background-color: #5d5d5b;
     border-color: #000;
+    color: #f59117;
+    text-shadow: none;
 }
 
-.input select{
-    background-color: #828281;
-    color: #fff;
+.select{
+    width: 99%;
 }
 
 .input textarea{
@@ -111,4 +191,10 @@ a:hover {
 .title{
 	padding-top: 10px;
 	text-align: center;
+}
+
+.ui-input-btn input {
+    background: #f59117;
+    color: #5d5d5b;
+    opacity: 0;
 }
