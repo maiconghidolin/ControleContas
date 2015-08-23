@@ -13,6 +13,7 @@
         <script type="text/javascript" charset="utf-8" src="jquery/jquery-1.11.3.min.js"></script>
         <script type="text/javascript" charset="utf-8" src="jquery/jquery.mobile-1.4.5.min.js"></script>
 		<script type="text/javascript" charset="utf-8" src="jquery/jquery-ui.min.js"></script>
+		<script type="text/javascript" charset="utf-8" src="js/funcoes.js"></script>
 
 		<link rel="stylesheet" type="text/css" href="css/style.css"/>
 
@@ -20,29 +21,343 @@
 
         	document.addEventListener('deviceready', onDeviceReady, false);
 
+        	var BancoDados;
         	function onDeviceReady() {
-	        	document.addEventListener("backbutton", function(e){
-	        		if($.mobile.activePage.is('#main')){
-				        e.preventDefault();
-				        navigator.app.exitApp();
-				    } else if($.mobile.activePage.is('#Cadastros')){
-						$.mobile.changePage("#main", { transition: "flow", reverse: "true"});
-				   	} else if($.mobile.activePage.is('#Estatisticas')){
-						$.mobile.changePage("#main", { transition: "flow", reverse: "true"});
-				   	} else if($.mobile.activePage.is('#CadastroDespesas')){
-				   		$("#txtData" ).datepicker("hide");
-				        $.mobile.changePage("#Cadastros", { transition: "flow", reverse: "true"});
-				    }
-			    }, false);
+	        	document.addEventListener("backbutton", backbutton, false);
+	        	BancoDados = window.openDatabase("controlecontas", "1.0", "Controle de Contas", 200000);
+	    	}
+
+	    	function backbutton(e){
+	    		if($.mobile.activePage.is('#main')){
+	    			e.preventDefault();
+	    			navigator.app.exitApp();
+	    		} else if($.mobile.activePage.is('#Cadastros')){
+	    			$.mobile.changePage("#main", { transition: "flow", reverse: "true"});
+	    		} else if($.mobile.activePage.is('#Estatisticas')){
+	    			$.mobile.changePage("#main", { transition: "flow", reverse: "true"});
+	    		} else if($.mobile.activePage.is('#CadastroDespesas')){
+	    			$("#txtDataDespesa" ).datepicker("hide");
+	    			$.mobile.changePage("#Cadastros", { transition: "flow", reverse: "true"});
+	    		} else if($.mobile.activePage.is('#CadastroTipoPagamento')){
+	    			$.mobile.changePage("#Cadastros", { transition: "flow", reverse: "true"});
+	    		} else if($.mobile.activePage.is('#CadastroCategoria')){
+	    			$.mobile.changePage("#Cadastros", { transition: "flow", reverse: "true"});
+	    		}
 	    	}
 
 		    $(document).ready(function() {            			
-				$( "#txtData" ).datepicker({
+				$( "#txtDataDespesa" ).datepicker({
 					dateFormat: "dd/mm/yy"
 				});
 			});
 
-        </script>   
+        </script>  
+
+        <script id="scriptDespesa" type="text/javascript" charset="utf-8"> 
+        
+        	function LoadCadastroDespesa(){
+        		BuscarTipoPagamentoCadastroDespesa();
+        		BuscarCategoriaCadastroDespesa();
+        	}
+
+        	function BuscarTipoPagamentoCadastroDespesa() {
+        		BancoDados.transaction(BuscarTipoPagamentoCadastroDespesaNoBanco, 
+        			function(erro){
+        				MensagemCadastroDespesa("Erro ao buscar os tipos de pagamento!");
+        			}
+        		);
+        	}
+
+        	function BuscarTipoPagamentoCadastroDespesaNoBanco(e){
+        		e.executeSql('CREATE TABLE IF NOT EXISTS tipopagamento (id INTEGER PRIMARY KEY, descricao)');
+			    e.executeSql('SELECT * FROM tipopagamento', [], ResultadoTipoPagamentoCadastroDespesa, 
+			    	function(erro){
+			    		MensagemCadastroDespesa("Erro ao buscar os tipos de pagamento!");
+        			}
+        		);
+        	}
+
+        	function ResultadoTipoPagamentoCadastroDespesa(e, results){
+	            var len = results.rows.length;
+        		var sltTipoPagamentoDespesa = document.getElementById("sltTipoPagamentoDespesa");
+	            for (var i=0; i<len; i++){
+	            	sltTipoPagamentoDespesa.options[i + 1] = new Option(results.rows.item(i).descricao, results.rows.item(i).id);
+	            }
+	            $("#sltTipoPagamentoDespesa").selectmenu("refresh", true);
+        	}
+
+        	function BuscarCategoriaCadastroDespesa() {
+        		BancoDados.transaction(BuscarCategoriaCadastroDespesaNoBanco, 
+        			function(erro){
+        				MensagemCadastroDespesa("Erro ao buscar as categorias!");
+        			}
+        		);
+        	}
+
+        	function BuscarCategoriaCadastroDespesaNoBanco(e){
+        		e.executeSql('CREATE TABLE IF NOT EXISTS categoria (id INTEGER PRIMARY KEY, descricao)');
+			    e.executeSql('SELECT * FROM categoria', [], ResultadoCategoriaCadastroDespesa, 
+			    	function(erro){
+			    		MensagemCadastroDespesa("Erro ao buscar as categorias!");
+        			}
+        		);
+        	}
+
+        	function ResultadoCategoriaCadastroDespesa(e, results){
+	            var len = results.rows.length;
+	            var sltCategoriaDespesa = document.getElementById("sltCategoriaDespesa");
+	            for (var i=0; i<len; i++){
+	            	sltCategoriaDespesa.options[i + 1] = new Option(results.rows.item(i).descricao, results.rows.item(i).id);
+	            }
+	            $("#sltCategoriaDespesa").selectmenu("refresh", true);
+        	}
+
+        	function SalvarDespesa(){
+        		if($("#sltCategoriaDespesa").val() == "0"){
+        			MensagemCadastroDespesa("Selecione uma categoria!");
+        			return;
+        		}
+        		if($("#sltTipoPagamentoDespesa").val() == "0"){
+        			MensagemCadastroDespesa("Selecione um tipo de pagamento!");
+        			return;
+        		}		
+        		if($("#txtDataDespesa").val().trim() == ""){
+        			MensagemCadastroDespesa("Informe a data!");
+        			return;
+        		}	
+        		if($("#txtValorDespesa").val().trim() == ""){
+        			MensagemCadastroDespesa("Informe o valor!");
+        			return;
+        		}	
+
+        		BancoDados.transaction(InsereDespesaNoBanco, 
+	        		function(erro){
+	        			MensagemCadastroDespesa("Erro ao salvar a despesa!");
+	        		}, 
+	        		function(){
+	        			LimpaCampos();
+	        			MensagemCadastroDespesa("Salvo com sucesso!");
+	        		}
+	        	);
+        	}
+
+        	function InsereDespesaNoBanco(e){
+        		var Categoria = $("#sltCategoriaDespesa").val();
+        		var Tipo = $("#sltTipoPagamentoDespesa").val();
+        		var Valor = $("#txtValorDespesa").val();
+        		var Data = $("#txtDataDespesa").val();
+        		
+        		e.executeSql('CREATE TABLE IF NOT EXISTS despesa (id INTEGER PRIMARY KEY, categoria INTEGER, tipopagamento INTEGER, data TEXT, valor NUMERIC)');
+			    e.executeSql('INSERT INTO despesa (categoria, tipopagamento, data, valor) VALUES (' + Categoria + ', ' + Tipo + ', "' + Data + '", ' + Valor + ')');
+        	}
+
+        	function LimpaCampos(){
+				$("#sltCategoriaDespesa").val("0");
+        		$("#sltTipoPagamentoDespesa").val("0");
+        		$("#txtDataDespesa").val("");
+        		$("#txtValorDespesa").val("");
+
+        		$("#sltCategoriaDespesa").selectmenu("refresh", true);
+        		$("#sltTipoPagamentoDespesa").selectmenu("refresh", true);
+        	}
+
+        	function BuscarDespesa() {
+        		BancoDados.transaction(BuscarDespesaNoBanco, 
+        			function(erro){
+        				MensagemCadastroDespesa("Erro ao buscar a despesa!");
+        			}
+        		);
+        	}
+
+        	function BuscarDespesaNoBanco(e){
+			    e.executeSql('SELECT * FROM despesa', [], ResultadoDespesa, 
+			    	function(erro){
+        				MensagemCadastroDespesa("Erro ao buscar a despesa!");
+        			}
+        		);
+        	}
+
+        	function ResultadoDespesa(e, results){
+        		var len = results.rows.length;
+        		var texto = "";
+	            for (var i=0; i<len; i++){
+	                texto += "Id = " + results.rows.item(i).id + " Tipo =  " + results.rows.item(i).tipopagamento + " Categoria =  " + results.rows.item(i).categoria + " Data =  " + results.rows.item(i).data + " Valor =  " + results.rows.item(i).valor + "\n";
+	            }
+	            alert(texto);
+        	}
+
+        	function MensagemCadastroDespesa(msg){
+        		$("#ConteudoPopUpCadastroDespesa").html(msg);
+        		$("#btnPopupCadastroDespesa").trigger("click");
+        	}
+
+        </script> 
+
+        <script id="scriptTipoPagamento" type="text/javascript" charset="utf-8"> 
+        
+        	function LoadCadastroTipoPagamento(){
+				BuscarProximoCodigoTipoPagamento();
+			}
+
+        	function SalvarTipoPagamento(){
+
+        		if($("#txtDescricaoTipoPagamento").val().trim() == ""){
+        			MensagemTipoPagamento("A descrição é obrigatória!");
+        			return;
+        		}
+
+        		BancoDados.transaction(InsereTipoPagamentoNoBanco, 
+	        		function(erro){
+	        			MensagemTipoPagamento("Erro ao salvar o tipo de pagamento!");
+	        		}, 
+	        		function(){
+	        			BuscarProximoCodigoTipoPagamento();
+	        			$("#txtDescricaoTipoPagamento").val("");
+	        			MensagemTipoPagamento("Salvo com sucesso!");
+	        		}
+	        	);
+        	}
+
+        	function InsereTipoPagamentoNoBanco(e){
+        		var descricao = new String($("#txtDescricaoTipoPagamento").val());
+        		e.executeSql('CREATE TABLE IF NOT EXISTS tipopagamento (id INTEGER PRIMARY KEY, descricao)');
+			    e.executeSql('INSERT INTO tipopagamento (descricao) VALUES ("' + descricao + '")');
+        	}
+
+        	function BuscarTipoPagamento() {
+        		BancoDados.transaction(BuscarTipoPagamentoNoBanco, 
+        			function(erro){
+        				MensagemTipoPagamento("Erro ao buscar o tipo de pagamento!");
+        			}
+        		);
+        	}
+
+        	function BuscarTipoPagamentoNoBanco(e){
+        		e.executeSql('CREATE TABLE IF NOT EXISTS tipopagamento (id INTEGER PRIMARY KEY, descricao)');
+			    e.executeSql('SELECT * FROM tipopagamento', [], ResultadoTipoPagamento, 
+			    	function(erro){
+        				MensagemTipoPagamento("Erro ao buscar o tipo de pagamento!");
+        			}
+        		);
+        	}
+
+        	function ResultadoTipoPagamento(e, results){
+        		var len = results.rows.length;
+        		var texto = "";
+	            for (var i=0; i<len; i++){
+	                texto += "Id = " + results.rows.item(i).id + " Descrição =  " + results.rows.item(i).descricao + "\n";
+	            }
+	            alert(texto);
+        	}
+
+        	function BuscarProximoCodigoTipoPagamento(){
+        		BancoDados.transaction(BuscarProximoCodigoTipoPagamentoNoBanco, 
+        			function(erro){
+        				MensagemTipoPagamento("Erro ao buscar o próximo código do tipo de pagamento!");
+        			}
+        		);
+        	}
+
+        	function BuscarProximoCodigoTipoPagamentoNoBanco(e){
+        		e.executeSql('CREATE TABLE IF NOT EXISTS tipopagamento (id INTEGER PRIMARY KEY, descricao)');
+			    e.executeSql('SELECT MAX(id) as maxid FROM tipopagamento', [], 
+			    	function(e, results){
+			    		$("#txtCodigoTipoPagamento").val(results.rows.item(0).maxid + 1);
+			    	}, function(erro){
+			    		MensagemTipoPagamento("Erro ao buscar o próximo código do tipo de pagamento!");
+			    	}
+			    );
+        	}
+
+        	function MensagemTipoPagamento(msg){
+        		$("#ConteudoPopUpTipoPagamento").html(msg);
+        		$("#btnPopupTipoPagamento").trigger("click");
+        	}
+
+        </script> 
+
+		<script id="scriptCategoria" type="text/javascript" charset="utf-8"> 
+        
+			function LoadCadastroCategoria(){
+				BuscarProximoCodigoCategoria();
+			}
+
+        	function SalvarCategoria(){
+        		if($("#txtDescricaoCategoria").val().trim() == ""){
+        			MensagemCategoria("A descrição é obrigatória!");
+        			return;
+        		}
+
+        		BancoDados.transaction(InsereCategoriaNoBanco, 
+	        		function(erro){
+	        			MensagemCategoria("Erro ao salvar a categoria!");
+	        		}, 
+	        		function(){
+	        			BuscarProximoCodigoCategoria();
+	        			$("#txtDescricaoCategoria").val("");
+	        			MensagemCategoria("Salvo com sucesso!");
+	        		}
+	        	);
+        	}
+
+        	function InsereCategoriaNoBanco(e){
+        		var descricao = new String($("#txtDescricaoCategoria").val());
+        		e.executeSql('CREATE TABLE IF NOT EXISTS categoria (id INTEGER PRIMARY KEY, descricao)');
+			    e.executeSql('INSERT INTO categoria (descricao) VALUES ("' + descricao + '")');
+        	}
+
+        	function BuscarCategoria() {
+        		BancoDados.transaction(BuscarCategoriaNoBanco, 
+        			function(erro){
+        				MensagemCategoria("Erro ao buscar a categoria!");
+        			}
+        		);
+        	}
+
+        	function BuscarCategoriaNoBanco(e){
+        		e.executeSql('CREATE TABLE IF NOT EXISTS categoria (id INTEGER PRIMARY KEY, descricao)');
+			    e.executeSql('SELECT * FROM categoria', [], ResultadoCategoria, 
+			    	function(erro){
+        				MensagemCategoria("Erro ao buscar a categoria!");
+        			}
+        		);
+        	}
+
+        	function ResultadoCategoria(e, results){
+        		var len = results.rows.length;
+        		var texto = "";
+	            for (var i=0; i<len; i++){
+	                texto += "Id = " + results.rows.item(i).id + " Descrição =  " + results.rows.item(i).descricao + "\n";
+	            }
+	            alert(texto);
+        	}
+
+        	function BuscarProximoCodigoCategoria(){
+        		BancoDados.transaction(BuscarProximoCodigoCategoriaNoBanco, 
+        			function(erro){
+        				MensagemCategoria("Erro ao buscar o próximo código da categoria!");
+        			}
+        		);
+        	}
+
+        	function BuscarProximoCodigoCategoriaNoBanco(e){
+        		e.executeSql('CREATE TABLE IF NOT EXISTS categoria (id INTEGER PRIMARY KEY, descricao)');
+			    e.executeSql('SELECT MAX(id) as maxid FROM categoria', [], 
+			    	function(e, results){
+			    		$("#txtCodigoCategoria").val(results.rows.item(0).maxid + 1);
+			    	}, function(erro){
+			    		MensagemCategoria("Erro ao buscar o próximo código da categoria!");
+			    	}
+			    );
+        	}
+
+        	function MensagemCategoria(msg){
+        		$("#ConteudoPopUpCategoria").html(msg);
+        		$("#btnPopupCategoria").trigger("click");
+        	}
+
+        </script> 
+
     </head>
     <body>
 	    <form>
@@ -78,44 +393,209 @@
 	            	</div>
 	            </div>
 	        </div>
+	        
+	        <!-- DIVS DA ABA CADASTROS -->
+
 	        <div data-role="page" id="Cadastros">
-	            <div data-role="content">
-	            	<div class="fieldzao">
-	            		<a class="fieldumquarto" href="#main" data-transition="flow" data-direction="reverse">
-	            			<div class="icone-voltar">
-	            				<i class="fa fa-arrow-circle-left"></i>
-	            			</div>
-	            		</a>	
-						<div class="fieldmeio">
-							<div class="title">
-	            				<label>Adicionar novo(a):</label>
-	            			</div>
-	            		</div>
-	            	</div>
-	            	<div class="fieldzao">
-						<a class="fieldmeio" href="#CadastroDespesas" data-transition="flow">
-							<div class="icone-com-titulo">
-								<i class="fa fa-file-text-o"></i>
-								<label>Despesa</label>
-							</div>
-	            		</a>
-	            		<div class="fieldmeio">
-							<div class="icone-com-titulo">
-								<i class="fa fa-credit-card"></i>
-								<label>Tipo Pagamento</label>
-							</div>
-	            		</div>
-	            	</div>
-	            	<div class="fieldzao">
-						<div class="fieldmeio">
-							<div class="icone">
-								<i class="fa fa-list-ul"></i>
-								<label>Categoria</label>
-							</div>
-	            		</div>
-	            	</div>
-	            </div>
+	        	<div data-role="content">
+	        		<div class="fieldzao">
+	        			<a class="fieldumquarto" href="#main" data-transition="flow" data-direction="reverse">
+	        				<div class="icone-voltar">
+	        					<i class="fa fa-arrow-circle-left"></i>
+	        				</div>
+	        			</a>	
+	        			<div class="fieldmeio">
+	        				<div class="title">
+	        					<label>Adicionar novo(a):</label>
+	        				</div>
+	        			</div>
+	        		</div>
+	        		<div class="fieldzao">
+	        			<a class="fieldmeio" onclick="LoadCadastroDespesa()" href="#CadastroDespesas" data-transition="flow">
+	        				<div class="icone-com-titulo">
+	        					<i class="fa fa-file-text-o"></i>
+	        					<label>Despesa</label>
+	        				</div>
+	        			</a>
+	        			<a class="fieldmeio" onclick="LoadCadastroTipoPagamento()" href="#CadastroTipoPagamento" data-transition="flow">
+	        				<div class="icone-com-titulo">
+	        					<i class="fa fa-credit-card"></i>
+	        					<label>Tipo Pagamento</label>
+	        				</div>
+	        			</a>
+	        		</div>
+	        		<div class="fieldzao">
+	        			<a class="fieldmeio" onclick="LoadCadastroCategoria()" href="#CadastroCategoria" data-transition="flow">
+	        				<div class="icone">
+	        					<i class="fa fa-list-ul"></i>
+	        					<label>Categoria</label>
+	        				</div>
+	        			</a>
+	        		</div>
+	        	</div>
 	        </div>
+	        <div data-role="page" id="CadastroDespesas">
+	        	<div data-role="content">
+	        		<div class="fieldzao">
+	        			<a class="fieldumquarto" href="#Cadastros" data-transition="flow" data-direction="reverse">
+	        				<div class="icone-voltar">
+	        					<i class="fa fa-arrow-circle-left"></i>
+	        				</div>
+	        			</a>	
+	        			<div class="fieldmeio">
+	        				<div class="title">
+	        					<label>Nova despesa:</label>
+	        				</div>
+	        			</div>
+	        		</div>
+	        		<div class="fieldzao">
+	        			<div class="fieldinteiro" >
+	        				<div class="label">
+	        					<label>Categoria:</label>
+	        				</div>
+	        				<div class="select">
+	        					<select id="sltCategoriaDespesa" data-native-menu="false" >
+	        						<option value="0">Selecione</option>
+	        					</select>
+	        				</div>
+	        			</div>
+	        		</div>
+	        		<div class="fieldzao">
+	        			<div class="fieldinteiro" >
+	        				<div class="label">
+	        					<label>Tipo pagamento:</label>
+	        				</div>
+	        				<div class="select">
+	        					<select id="sltTipoPagamentoDespesa" data-native-menu="false" >
+	        						<option value="0" >Selecione</option>
+	        					</select>
+	        				</div>
+	        			</div>
+	        		</div>
+	        		<div class="fieldzao">
+	        			<div class="fieldmeio" >
+	        				<div class="label">
+	        					<label>Data:</label>
+	        				</div>
+	        				<div class="input">
+	        					<input type="text" id="txtDataDespesa" readonly>
+	        				</div>
+	        			</div>
+	        			<div class="fieldmeio" >
+	        				<div class="label">
+	        					<label>Valor:</label>
+	        				</div>
+	        				<div class="input">
+	        					<input type="number" id="txtValorDespesa" >
+	        				</div>
+	        			</div>
+	        		</div>
+	        	</div>
+	        	<div data-role="footer" data-position="fixed" style="text-align:center"> 
+	        		<input type="button" id="btnSalvarDespesa" value="Salvar" onclick="SalvarDespesa()" >  
+	        		<input type="button" id="btnBuscar" value="Buscar" onclick="BuscarDespesa()" >   	   	
+	        	</div> 
+	        	<a id="btnPopupCadastroDespesa" href="#popupCadastroDespesa" data-rel="popup" style="display:none"></a>
+	        	<div data-role="popup" id="popupCadastroDespesa" data-position-to="window">
+	        		<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right"></a>
+	        		<div id="ConteudoPopUpCadastroDespesa"></div>
+				</div>
+	        </div>
+	        <div data-role="page" id="CadastroTipoPagamento">
+	        	<div data-role="content">
+	        		<div class="fieldzao">
+	        			<a class="fieldumquarto" href="#Cadastros" data-transition="flow" data-direction="reverse">
+	        				<div class="icone-voltar">
+	        					<i class="fa fa-arrow-circle-left"></i>
+	        				</div>
+	        			</a>	
+	        			<div class="fieldmeio">
+	        				<div class="title">
+	        					<label>Novo tipo de pagamento:</label>
+	        				</div>
+	        			</div>
+	        		</div>
+	        		<div class="fieldzao">
+	        			<div class="fieldinteiro" >
+	        				<div class="label">
+	        					<label>Código:</label>
+	        				</div>
+	        				<div class="input">
+	        					<input type="text" id="txtCodigoTipoPagamento" readonly>
+	        				</div>
+	        			</div>
+	        		</div>
+	        		<div class="fieldzao">
+	        			<div class="fieldinteiro" >
+	        				<div class="label">
+	        					<label>Descrição:</label>
+	        				</div>
+	        				<div class="input">
+	        					<input type="text" id="txtDescricaoTipoPagamento">
+	        				</div>
+	        			</div>
+	        		</div>
+	        	</div>
+	        	<div data-role="footer" data-position="fixed" style="text-align:center"> 
+	        		<input type="button" id="btnSalvarTipoPagamento" value="Salvar" onclick="SalvarTipoPagamento()" >  
+	        		<input type="button" id="btnBuscar" value="Buscar" onclick="BuscarTipoPagamento()" >   	
+	        	</div> 
+	        	<a id="btnPopupTipoPagamento" href="#popupTipoPagamento" data-rel="popup" style="display:none"></a>
+	        	<div data-role="popup" id="popupTipoPagamento" data-position-to="window">
+	        		<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right"></a>
+	        		<div id="ConteudoPopUpTipoPagamento"></div>
+				</div>
+	        </div>
+	        <div data-role="page" id="CadastroCategoria">
+	        	<div data-role="content">
+	        		<div class="fieldzao">
+	        			<a class="fieldumquarto" href="#Cadastros" data-transition="flow" data-direction="reverse">
+	        				<div class="icone-voltar">
+	        					<i class="fa fa-arrow-circle-left"></i>
+	        				</div>
+	        			</a>	
+	        			<div class="fieldmeio">
+	        				<div class="title">
+	        					<label>Nova categoria:</label>
+	        				</div>
+	        			</div>
+	        		</div>
+	        		<div class="fieldzao">
+	        			<div class="fieldinteiro" >
+	        				<div class="label">
+	        					<label>Código:</label>
+	        				</div>
+	        				<div class="input">
+	        					<input type="text" id="txtCodigoCategoria" readonly>
+	        				</div>
+	        			</div>
+	        		</div>
+	        		<div class="fieldzao">
+	        			<div class="fieldinteiro" >
+	        				<div class="label">
+	        					<label>Descrição:</label>
+	        				</div>
+	        				<div class="input">
+	        					<input type="text" id="txtDescricaoCategoria">
+	        				</div>
+	        			</div>
+	        		</div>
+	        	</div>
+	        	<div data-role="footer" data-position="fixed" style="text-align:center"> 
+	        		<input type="button" id="btnSalvarCategoria" value="Salvar" onclick="SalvarCategoria()" > 
+	        		<input type="button" id="btnBuscar" value="Buscar" onclick="BuscarCategoria()" >       	
+	        	</div> 
+	        	<a id="btnPopupCategoria" href="#popupCategoria" data-rel="popup" style="display:none"></a>
+	        	<div data-role="popup" id="popupCategoria" data-position-to="window">
+	        		<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right"></a>
+	        		<div id="ConteudoPopUpCategoria"></div>
+				</div>
+	        </div>
+	        
+	        <!-- FIM DAS DIVS DA ABA CADASTROS -->
+	        
+	        <!-- DIVS DA ABA ESTATISTICAS -->
+
 	        <div data-role="page" id="Estatisticas">
 	            <div data-role="content">
 	            	<div class="fieldzao">
@@ -154,73 +634,9 @@
 	            	</div>
 	            </div>
 	        </div>
-	        <div data-role="page" id="CadastroDespesas">
-	            <div data-role="content">
-	            	<div class="fieldzao">
-	            		<a class="fieldumquarto" href="#Cadastros" data-transition="flow" data-direction="reverse">
-	            			<div class="icone-voltar">
-	            				<i class="fa fa-arrow-circle-left"></i>
-	            			</div>
-	            		</a>	
-						<div class="fieldmeio">
-							<div class="title">
-	            				<label>Nova despesa:</label>
-	            			</div>
-	            		</div>
-	            	</div>
-	            	<div class="fieldzao">
-						<div class="fieldinteiro" >
-							<div class="label">
-								<label>Categoria:</label>
-							</div>
-							<div class="select">
-								<select name="sltCategoria" id="sltCategoria" data-native-menu="false">
-									<option value="mon">Monday</option>
-								   	<option value="tue">Tuesday</option>
-								   	<option value="wed">Wednesday</option>
-								</select>
-							</div>
-	            		</div>
-	            	</div>
-	            	<div class="fieldzao">
-						<div class="fieldinteiro" >
-							<div class="label">
-								<label>Tipo pagamento:</label>
-							</div>
-							<div class="select">
-								<select name="sltTipoPagamento" id="sltTipoPagamento" data-native-menu="false">
-									<option value="mon">Monday</option>
-								   	<option value="tue">Tuesday</option>
-								   	<option value="wed">Wednesday</option>
-							    </select>
-							</div>
-	            		</div>
-	            	</div>
-	            	<div class="fieldzao">
-						<div class="fieldmeio" >
-							<div class="label">
-								<label>Data:</label>
-							</div>
-							<div class="input">
-								<input type="text" id="txtData" readonly>
-							</div>
-	            		</div>
-	            		<div class="fieldmeio" >
-							<div class="label">
-								<label>Valor:</label>
-							</div>
-							<div class="input">
-								<input type="text" id="txtValor">
-							</div>
-	            		</div>
-	            	</div>
-	            </div>
-	            <div data-role="footer" data-position="fixed" style="text-align:center"> 
-	            	<div >
-	            		<input type="button" id="btnSalvar" value="Salvar" > 
-	            	</div>
-				</div> 
-	        </div>
+	        
+	        <!-- FIM DAS DIVS DA ABA ESTATISTICAS -->
+
 	    </form>
     </body>
 </html>
